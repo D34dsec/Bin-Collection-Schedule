@@ -1,6 +1,6 @@
 async function fetchBinSchedule(postcode, uprn) {
     const targetUrl = `https://www.nelincs.gov.uk/?s=${encodeURIComponent(postcode)}&uprn=${encodeURIComponent(uprn)}`;
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+    const proxyUrl = `https://cors-anywhere.herokuapp.com/${targetUrl}`;
   
     try {
       const response = await fetch(proxyUrl);
