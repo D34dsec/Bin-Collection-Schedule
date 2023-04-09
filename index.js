@@ -6,6 +6,12 @@ async function fetchBinSchedule(postcode, uprn) {
       const response = await fetch(proxyUrl);
       const data = await response.json();
       console.log('API response:', data);
+
+      if (!data.contents) {
+        console.error('No data.contents in the API response:', data);
+        return null;
+      }
+
       const html = data.contents;
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');  
