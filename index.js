@@ -5,6 +5,7 @@ async function fetchBinSchedule(postcode, uprn) {
     try {
       const response = await fetch(proxyUrl);
       const data = await response.json();
+      console.log('API response:', data);
       const html = data.contents;
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');  
