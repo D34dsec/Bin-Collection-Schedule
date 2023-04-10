@@ -32,9 +32,27 @@ async function fetchBinSchedule(postcode, uprn) {
       collectionInfo.textContent = 'No information available.';
     }
   }
+
+  function displayUpcomingCollections(binSchedule) {
+    const upcomingList = document.getElementById('upcoming-list');
+  
+    if (binSchedule && binSchedule.length > 1) {
+      binSchedule.slice(1, 6).forEach(({ binType, collectionDate }) => {
+        const listItem = document.createElement('li');
+        listItem.classList.add('list-group-item');
+        listItem.innerHTML = `<i class="fas fa-trash-alt bin-icon"></i>${collectionDate}: ${binType}`;
+        upcomingList.appendChild(listItem);
+      });
+    } else {
+      upcomingList.textContent = 'No information available.';
+    }
+  }
   
   const postcode = 'Dn333aa';
   const uprn = '11020537';
   fetchBinSchedule(postcode, uprn)
-    .then(binSchedule => displayNextCollection(binSchedule))
-    .catch(error => console.error('Error:', error));  
+    .then((binSchedule) => {
+      displayNextCollection(binSchedule);
+      displayUpcomingCollections(binSchedule);
+  })
+  .catch((error) => console.error('Error:', error));  
