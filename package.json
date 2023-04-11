@@ -1,17 +1,5 @@
 {
   "name": "bin-collection-schedule",
   "version": "1.0.0",
-  "description": "A simple web app to display bin collection schedule",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "node-fetch": "^2.6.6"
-  },
-  "engines": {
-    "node": "14.x"
-  }
+  "description": "A simple web app to display bin collection schedule"
 }
