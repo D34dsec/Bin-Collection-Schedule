@@ -1,27 +1,41 @@
+// Import the Firebase modules
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js';
+import { getFirestore, collection, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/9.1.0/firebase-firestore.js';
+
+// Your Firebase web app's configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBDoUxyDRXnpoVy0AdgKXyz-pZ8_MgRyaA",
+  authDomain: "bin-schedule.firebaseapp.com",
+  projectId: "bin-schedule",
+  storageBucket: "bin-schedule.appspot.com",
+  messagingSenderId: "983381376891",
+  appId: "1:983381376891:web:1a89715572c0a9d12387de",
+  measurementId: "G-6Z19EZW15H"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 async function fetchBinSchedule(postcode, uprn) {
-  const apiUrl = `/api/bin-schedule?postcode=${encodeURIComponent(postcode)}&uprn=${encodeURIComponent(uprn)}`;
+  const docRef = doc(db, 'binSchedules', `${postcode}_${uprn}`);
 
   try {
-    const response = await fetch(apiUrl);
-    const html = await response.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-  
-    const binSchedule = [];
-    const items = doc.querySelectorAll('ul.list-group-flush li.bin-collection-item');
-    items.forEach((element) => {
-      const binType = element.querySelector('div:last-child > div:last-child').textContent.trim();
-      const collectionDate = element.querySelector('div:last-child > h3').textContent.trim();
+    const docSnap = await getDoc(docRef);
 
-      binSchedule.push({ binType, collectionDate });
-    });
-
-    return binSchedule;
-    } catch (error) {
-      console.error('Error fetching bin schedule:', error);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      return data.schedule;
+    } else {
+      console.error('No bin schedule data found in Firebase.');
       return null;
     }
+  } catch (error) {
+    console.error('Error fetching bin schedule from Firebase:', error);
+    return null;
   }
+}
+
   
   function displayNextCollection(binSchedule) {
     const collectionInfo = document.getElementById('collection-info');
